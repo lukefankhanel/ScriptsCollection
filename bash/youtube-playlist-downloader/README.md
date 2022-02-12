@@ -10,10 +10,11 @@ A script that uses the Youtube-dl (Youtube Downloader) command line interface to
 2. Set up a cronjob to run the script to download new videos in your desired timeframe; have this cronjob point to the script
 3. Add your desired SMTP sever and user credentials for the email functionality, explained below
 ```
-SMTPServer              -- The SMTP Server URL to use
-emailRecipient          -- The email that will recieve the notification email from the script
-emailSenderUsername=    -- The username of the email that sends the notification email
-emailSenderPassword     -- The password of the email that sends the notification email
-scriptLocation          -- The fully qualified location of the script
-playlistListLocation    -- The location of the text list of playlists
+SMTPServer                  -- The SMTP Server URL to use
+emailRecipient              -- The email that will recieve the notification email from the script
+emailSenderUsername=        -- The username of the email that sends the notification email
+emailSenderPassword         -- The password of the email that sends the notification email
+scriptLocation              -- The fully qualified location of the script
+playlistListLocation        -- The location of the text list of playlists
+youtubeDownloaderLocation   -- The fully qualified location of youtube-dl (run which youtube-dl)
 ```
