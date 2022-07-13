@@ -5,7 +5,7 @@
 # then retreive the refresh token from the request, and only then, can this script be used.
 # Note: given that the Service is only a Google Testing Service, the refresh token is only valid for 7 days 
 # unlike normal refresh tokens that are generally valid indefinitely.
-
+# https://stackoverflow.com/questions/8953983/do-google-refresh-tokens-expire
 
 #Put this URL into your browser to get a one-time code for your first curl request.
 #https://accounts.google.com/o/oauth2/v2/auth?client_id=[oAuthClientID HERE]&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://mail.google.com/&response_type=code
