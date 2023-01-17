@@ -1,0 +1,2 @@
+# Password Generator
+This is a simple password generator created with the help of Chat GPT. Users can define the length of the password, which is randomly created from a customized list of letters, numbers, and special characters. 

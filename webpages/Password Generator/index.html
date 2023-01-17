@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Password Generator</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="./favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="./favicon_io/site.webmanifest">
+</head>
+
+<body onload="changeColor()">
+    <div class="container">
+        <h1>Password Generator</h1>
+        <input type="text" placeholder="Password">
+        <input type="number" min="0" max="100" value="20" step="1" oninput="showValue(this.value)"
+            onchange="showValue(this.value)">
+        <button onclick="generatePassword()">Generate Password</button>
+    </div>
+</body>
+
+<script src="script.js"></script>
