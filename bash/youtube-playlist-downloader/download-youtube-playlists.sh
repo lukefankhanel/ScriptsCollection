@@ -12,7 +12,7 @@ cd ${scriptLocation}
 status=$?
 if [ ${status} -eq 1 ];
 then
-    echo "ERROR: Could not move to scriptLocation specifed."
+    echo "EXCEPTION: Could not move to scriptLocation specified."
     exit 1
 fi
 
@@ -30,8 +30,20 @@ for playlist in `cat ${playlistListLocation}`;
 do
     # Get the name of the playlist by making a request and pulling the JSON information for the first 
     # video in the playlist
-    playlistName=`${youtubeDownloaderLocation} --playlist-end 1 -j -f bestaudio ${playlist} | jq -r .playlist`
+    playlistName=`${youtubeDownloaderLocation} --playlist-reverse -i -j -f bestaudio ${playlist} | jq -r .playlist_title | head -n 1`
     
+    #Note: When requesting for the playlist name, a premier video cannot be used because the YouTube API considers premier 
+    #videos to not exist. Therefore, the above line's fix was implemented useing "--playlist-reverse -i" to try as hard as 
+    #possible to ensure there is a video to extract the playlist name from. 
+    #Failing that, we're checking here to see if the playlist name exists, if it does not, then skip this playlist's download. 
+    if [ -z "${playlistName}" ]
+    then
+        echo -e "----------\nEXCEPTION: No playlist-name data found... Skipping this playlist: \n${playlist}\n----------" \
+        >> ${scriptLocation}/error-log.txt
+        emailText+="\nERROR Downloading: See error-log.txt file for more information...\n${breakText}"
+        continue
+    fi
+
     # Download the videos
     ${youtubeDownloaderLocation} --download-archive ${scriptLocation}/"${playlistName}"/download-archive.txt \
     -o '%(playlist)s/%(playlist_index)s - %(title)s - %(id)s.%(ext)s' \
