@@ -83,7 +83,8 @@ do
     # Get the newly added videos based on the output of the download, from the output, look for the 
     # unique line "[ffmpeg] Adding metadata to" that only occurs on a new download, then strip all 
     # information aside from video name
-    metadataStringToRemove="\[ffmpeg\] Adding metadata to "
+    # NOTE: yt-dl uses [ffmpeg], whereas yt-dlp uses [Metadata]
+    metadataStringToRemove="\[Metadata\] Adding metadata to "
     newlyDownloadedSongs=`cat ${scriptLocation}/temp-log.txt | grep "$metadataStringToRemove" | sed "s/${metadataStringToRemove}//" \
         | sed "s/'\(.*\)'/\1/" | sed "s/.opus\|.m4a//" | sed "s/${playlistName}\///"`
 
