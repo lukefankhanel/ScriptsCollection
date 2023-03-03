@@ -7,7 +7,7 @@ emailSenderUsername=""
 emailSenderPassword=""
 scriptLocation=""
 playlistListLocation="./playlists"
-youtubeDownloaderLocation="/usr/local/bin/youtube-dl"
+youtubeDownloaderLocation="/usr/local/bin/youtube-dl" #/home/{YOUR_USER}/.local/bin/yt-dlp
 
 cd ${scriptLocation}
 status=$?
