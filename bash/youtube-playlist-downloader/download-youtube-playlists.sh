@@ -84,9 +84,12 @@ do
     # unique line "[ffmpeg] Adding metadata to" that only occurs on a new download, then strip all 
     # information aside from video name
     # NOTE: yt-dl uses [ffmpeg], whereas yt-dlp uses [Metadata]
+    # NOTE: Second sed command breakdown: \1 is the first capture group captured by \(.*\), this 
+    # will allow you to match for a type of string, but then still keep that part that was matched 
+    # inside the brackets without replacing it.
     metadataStringToRemove="\[Metadata\] Adding metadata to "
     newlyDownloadedSongs=`cat ${scriptLocation}/temp-log.txt | grep "$metadataStringToRemove" | sed "s/${metadataStringToRemove}//" \
-        | sed "s/'\(.*\)'/\1/" | sed "s/.opus\|.m4a//" | sed "s/${playlistName}\///"`
+        | sed "s/\"\(.*\)\"/\1/" | sed "s/.opus\|.m4a//" | sed "s/${playlistName}\///"`
 
     # If there are no new videos downloaded, change the output text
     if [[ -z "${newlyDownloadedSongs}" ]]
