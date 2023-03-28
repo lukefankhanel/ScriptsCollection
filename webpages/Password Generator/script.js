@@ -42,13 +42,10 @@ function generateCharacter(firstCharacter) {
     }
     var characters;
 
-    //All character string, use this once everything is moved over to Excel
-    //Be careful of backslashes though...
-    //ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;':\"<>,.?/\\
     if (firstCharacter) {
         characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     } else {
-        characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#^&*)_=];':\"<>,.";
+        characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;':\"<>,.?/\\";
     }
     return characters.charAt(Math.floor(Math.random() * characters.length));
 }
