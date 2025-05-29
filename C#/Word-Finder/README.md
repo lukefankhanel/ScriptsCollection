@@ -1,0 +1,1 @@
+A simple command-line application to take in a string of characters and find all possible combinations of that string that match words.
