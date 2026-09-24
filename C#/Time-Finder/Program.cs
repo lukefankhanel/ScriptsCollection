@@ -1,6 +1,6 @@
 using System.Globalization;
 
-class Program
+public class Program
 {
     // 24-hour HH:MM is the primary format; 12-hour forms like "2PM" or "2:30 PM" are also accepted.
     private static readonly string[] AcceptedFormats =
@@ -14,31 +14,35 @@ class Program
     public static int Main(string[] args)
     {
         var input = args.Length > 0 ? string.Join(" ", args) : Prompt();
+        return Run(input, DateTime.Now, Console.Out, Console.Error);
+    }
 
+    // Writes the time remaining until input to output, or an error message to error.
+    // Returns the process exit code.
+    public static int Run(string input, DateTime now, TextWriter output, TextWriter error)
+    {
         if (!TryParseInput(input, out var date, out var time))
         {
-            Console.Error.WriteLine($"Invalid input \"{input}\". Enter a time in HH:MM format (e.g. 14:00), " +
+            error.WriteLine($"Invalid input \"{input}\". Enter a time in HH:MM format (e.g. 14:00), " +
                 "optionally preceded by a YYYY-MM-DD date (e.g. 2026-09-26 14:00).");
             return 1;
         }
 
-        var now = DateTime.Now;
-
         if (date is null)
         {
             var remaining = TimeUntil(TimeOnly.FromDateTime(now), time);
-            Console.WriteLine($"{(int)remaining.TotalHours:D2}:{remaining.Minutes:D2}");
+            output.WriteLine($"{(int)remaining.TotalHours:D2}:{remaining.Minutes:D2}");
             return 0;
         }
 
         var remainingWithDate = TimeUntil(now, date.Value.ToDateTime(time));
         if (remainingWithDate < TimeSpan.Zero)
         {
-            Console.Error.WriteLine($"\"{input}\" is in the past.");
+            error.WriteLine($"\"{input}\" is in the past.");
             return 1;
         }
 
-        Console.WriteLine($"{remainingWithDate.Days:D2}:{remainingWithDate.Hours:D2}:{remainingWithDate.Minutes:D2}");
+        output.WriteLine($"{remainingWithDate.Days:D2}:{remainingWithDate.Hours:D2}:{remainingWithDate.Minutes:D2}");
         return 0;
     }
 
