@@ -9,27 +9,75 @@ class Program
         "h:mm tt", "h:mmtt", "h tt", "htt",
     ];
 
+    private const string DateFormat = "yyyy-MM-dd";
+
     public static int Main(string[] args)
     {
         var input = args.Length > 0 ? string.Join(" ", args) : Prompt();
 
-        if (!TryParseTime(input, out var target))
+        if (!TryParseInput(input, out var date, out var time))
         {
-            Console.Error.WriteLine($"Invalid time \"{input}\". Enter a time in HH:MM format (e.g. 14:00).");
+            Console.Error.WriteLine($"Invalid input \"{input}\". Enter a time in HH:MM format (e.g. 14:00), " +
+                "optionally preceded by a YYYY-MM-DD date (e.g. 2026-09-26 14:00).");
             return 1;
         }
 
-        var now = TimeOnly.FromDateTime(DateTime.Now);
-        var remaining = TimeUntil(now, target);
+        var now = DateTime.Now;
 
-        Console.WriteLine($"{(int)remaining.TotalHours:D2}:{remaining.Minutes:D2}");
+        if (date is null)
+        {
+            var remaining = TimeUntil(TimeOnly.FromDateTime(now), time);
+            Console.WriteLine($"{(int)remaining.TotalHours:D2}:{remaining.Minutes:D2}");
+            return 0;
+        }
+
+        var remainingWithDate = TimeUntil(now, date.Value.ToDateTime(time));
+        if (remainingWithDate < TimeSpan.Zero)
+        {
+            Console.Error.WriteLine($"\"{input}\" is in the past.");
+            return 1;
+        }
+
+        Console.WriteLine($"{remainingWithDate.Days:D2}:{remainingWithDate.Hours:D2}:{remainingWithDate.Minutes:D2}");
         return 0;
     }
 
     private static string Prompt()
     {
-        Console.Write("Enter a future time (HH:MM): ");
+        Console.Write("Enter a future time (HH:MM or YYYY-MM-DD HH:MM): ");
         return Console.ReadLine() ?? "";
+    }
+
+    // Parses "HH:MM" or "YYYY-MM-DD HH:MM". The date may also be joined to the time with
+    // a "T" (e.g. 2026-09-26T14:00). A date on its own means midnight at the start of that day.
+    public static bool TryParseInput(string input, out DateOnly? date, out TimeOnly time)
+    {
+        input = input.Trim();
+        date = null;
+        time = default;
+
+        if (input.Length >= DateFormat.Length &&
+            DateOnly.TryParseExact(input[..DateFormat.Length], DateFormat,
+                CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedDate))
+        {
+            date = parsedDate;
+            input = input[DateFormat.Length..];
+            if (input.StartsWith('T') || input.StartsWith('t'))
+            {
+                input = input[1..];
+            }
+            else if (input.Length > 0 && !char.IsWhiteSpace(input[0]))
+            {
+                return false;
+            }
+
+            if (input.Trim().Length == 0)
+            {
+                return true;
+            }
+        }
+
+        return TryParseTime(input, out time);
     }
 
     public static bool TryParseTime(string input, out TimeOnly time) =>
@@ -41,4 +89,9 @@ class Program
     // Seconds on the current time are ignored.
     public static TimeSpan TimeUntil(TimeOnly now, TimeOnly target) =>
         target - new TimeOnly(now.Hour, now.Minute);
+
+    // Returns the time from now until target, which is negative if target is in the past.
+    // Seconds on the current time are ignored.
+    public static TimeSpan TimeUntil(DateTime now, DateTime target) =>
+        target - new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, 0);
 }
