@@ -20,3 +20,9 @@ dotnet run -- 2026-09-26T14:00
 ```
 
 A date on its own (`2026-09-26`) means midnight at the start of that day. Dates in the past are rejected.
+
+## Tests
+
+```
+dotnet test
+```

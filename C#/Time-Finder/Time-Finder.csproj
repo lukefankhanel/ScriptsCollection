@@ -8,4 +8,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <!-- The test project lives in a subfolder; keep its files out of this project. -->
+  <ItemGroup>
+    <Compile Remove="Time-Finder.Tests/**" />
+    <None Remove="Time-Finder.Tests/**" />
+  </ItemGroup>
+
 </Project>
